@@ -15,7 +15,7 @@ class CategoryModel {
   String? image;
   String? address;
   String? timing;
-  List<dynamic>? data;
+  List<Datum>? data;
 
   CategoryModel({
     this.name,
@@ -34,7 +34,7 @@ class CategoryModel {
         timing: json["timing"],
         data: json["data"] == null
             ? []
-            : List<dynamic>.from(json["data"]!.map((x) => x)),
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +43,32 @@ class CategoryModel {
         "image": image,
         "address": address,
         "timing": timing,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x)),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
+}
+
+class Datum {
+  int? categoryId;
+  String? categoryName;
+  String? categoryImage;
+
+  Datum({
+    this.categoryId,
+    this.categoryName,
+    this.categoryImage,
+  });
+
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        categoryId: json["category_id"],
+        categoryName: json["category_name"],
+        categoryImage: json["category_image"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "category_id": categoryId,
+        "category_name": categoryName,
+        "category_image": categoryImage,
       };
 }

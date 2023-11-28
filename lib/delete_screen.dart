@@ -38,6 +38,7 @@ class _DeleteProductState extends State<DeleteProduct> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFF000000),
           title: Text(
             "Delete Products",
             style: TextStyle(

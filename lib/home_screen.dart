@@ -6,6 +6,7 @@ import 'package:backend3/delete_screen.dart';
 import 'package:backend3/main.dart';
 import 'package:backend3/products_model.dart';
 import 'package:backend3/update_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'category_model.dart';
@@ -32,11 +33,11 @@ class _ProductscreenState extends State<Productscreen> {
   }
 
   CategoryModel? category;
-  void getcategorydata() async {
+  void categorydata() async {
     try {
       Response response = await Dio()
           .get("http://jayanthi10.pythonanywhere.com/api/v1/list_category/");
-      print(response.data);
+      print("category data is =======> ${response.data}");
 
       category = categoryModelFromJson(jsonEncode(response.data));
     } catch (e) {
@@ -49,7 +50,7 @@ class _ProductscreenState extends State<Productscreen> {
     // TODO: implement initState
     super.initState();
     getproductsdata();
-    getcategorydata();
+    categorydata();
   }
 
   @override
@@ -64,7 +65,8 @@ class _ProductscreenState extends State<Productscreen> {
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MyApp()));
                 },
                 child: Icon(
                   Icons.arrow_back_ios_new,
@@ -78,7 +80,7 @@ class _ProductscreenState extends State<Productscreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Products List",
+                    "Products",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -112,17 +114,12 @@ class _ProductscreenState extends State<Productscreen> {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.all(14),
                               height: 170,
-                              width: 240,
+                              width: 200,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.grey.shade200,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey.shade200,
-                                      blurRadius: 4)
-                                ],
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,11 +131,14 @@ class _ProductscreenState extends State<Productscreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
-                                        image: AssetImage(
-                                            "${products!.data![index].image}"),
+                                        image: CachedNetworkImageProvider(
+                                            "http://jayanthi10.pythonanywhere.com/${products!.data![index].image}"),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                   Text(
                                     "${products!.data![index].productName}",
@@ -170,8 +170,9 @@ class _ProductscreenState extends State<Productscreen> {
                                                         UpdateProduct()));
                                           },
                                           child: Icon(
-                                            Icons.edit,
+                                            Icons.edit_note_outlined,
                                             color: Colors.grey,
+                                            size: 20,
                                           )),
                                       InkWell(
                                         onTap: () {
@@ -184,6 +185,7 @@ class _ProductscreenState extends State<Productscreen> {
                                         child: Icon(
                                           Icons.delete_outline_outlined,
                                           color: Colors.red,
+                                          size: 20,
                                         ),
                                       )
                                     ],
@@ -232,6 +234,7 @@ class _ProductscreenState extends State<Productscreen> {
               SizedBox(
                 height: 14,
               ),
+              //Text("${category!.data!.length}"),
               category == null
                   ? CircularProgressIndicator()
                   : Container(
@@ -240,7 +243,8 @@ class _ProductscreenState extends State<Productscreen> {
                           scrollDirection: Axis.vertical,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
-                              height: 120,
+                              padding: EdgeInsets.only(left: 16),
+                              height: 100,
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                   color: Colors.grey.shade300,
@@ -250,15 +254,16 @@ class _ProductscreenState extends State<Productscreen> {
                                 children: [
                                   Container(
                                     height: 80,
-                                    width: 100,
+                                    width: 80,
                                     decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
-                                            image: AssetImage(
-                                                "${category!.image}"),
+                                            image: CachedNetworkImageProvider(
+                                                "http://jayanthi10.pythonanywhere.com/${category!.data![index].categoryImage}"),
                                             fit: BoxFit.cover)),
                                   ),
                                   SizedBox(
-                                    width: 12,
+                                    width: 16,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -268,7 +273,7 @@ class _ProductscreenState extends State<Productscreen> {
                                         height: 26,
                                       ),
                                       Text(
-                                        "${category!.name}",
+                                        "${category!.data![index].categoryName}",
                                         style: TextStyle(
                                             fontSize: 16,
                                             color: Color(0xFF000000),

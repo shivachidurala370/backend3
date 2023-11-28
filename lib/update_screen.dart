@@ -61,6 +61,7 @@ class _UpdateproductState extends State<UpdateProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF000000),
         title: Text(
           "Update Products",
           style: TextStyle(
